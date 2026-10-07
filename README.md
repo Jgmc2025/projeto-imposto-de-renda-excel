@@ -1,85 +1,70 @@
-# 📊 Organizador de Imposto de Renda em Excel
+# 📊 IR APP – Organizador de Imposto de Renda em Excel
 
-Ferramenta construída **100% no Excel** para reunir, em um só lugar, as informações necessárias para a declaração de Imposto de Renda (IRPF): rendimentos, despesas dedutíveis, bens e direitos e dívidas. Possui menu de navegação, validações automáticas de dados, resumo com totais calculados por fórmulas e alertas de conferência.
+Agregador de dados para a declaração de Imposto de Renda construído **100% no Excel**. A ferramenta reúne os dados do titular, os informes de rendimentos bancários e as notas/pendências em telas com **menu lateral de navegação**, **validações automáticas**, **formatações personalizadas** e **links rápidos** para os sites da Receita Federal.
 
-> Projeto desenvolvido como desafio da [DIO](https://www.dio.me/) – Excel.
+> Projeto desenvolvido como desafio da [DIO](https://www.dio.me/) – "Criando um Organizador de Declaração de Imposto de Renda".
 
 ---
 
-## 🎯 Objetivos
+## 🖼️ Telas
 
-- Centralizar os dados do ano-calendário em abas organizadas.
-- Evitar erros de digitação com **validação de dados**.
-- Navegar com facilidade por **menu com hiperlinks internos**.
-- Consolidar tudo automaticamente em um **resumo** com alertas de pendências.
-- Oferecer **links rápidos** para os sites oficiais da Receita Federal.
+| 1. Titular | 2. Informes |
+|---|---|
+| ![Titular](images/01_titular.png) | ![Informes](images/02_informes.png) |
+
+| 3. Notas |
+|---|
+| ![Notas](images/03_notas.png) |
+
+> As imagens foram geradas a partir de uma cópia com **dados fictícios**, apenas para ilustração. O arquivo do projeto está em branco.
 
 ## 🗂️ Estrutura do arquivo (`Organizador_Imposto_de_Renda.xlsx`)
 
-| Aba | Função |
+| Aba | Conteúdo |
 |---|---|
-| **Menu** | Página inicial com botões (hiperlinks) para todas as abas |
-| **Rendimentos** | Data, fonte pagadora, CPF/CNPJ, tipo, valor bruto, IRRF e observação |
-| **Despesas** | Despesas dedutíveis por categoria, com controle de comprovante guardado |
-| **Bens_Direitos** | Bens com valor em 31/12 do ano anterior e do ano-calendário; variação calculada |
-| **Dividas** | Dívidas e ônus reais com saldos nas duas datas |
-| **Resumo** | Totais por tipo/categoria, deduções, patrimônio e alertas |
-| **Links_Uteis** | Atalhos para sites oficiais (Receita Federal, e-CAC, gov.br) |
-| **Listas** | Itens das listas suspensas (tipos de rendimento, categorias, tipos de bem, Sim/Não) |
+| **TITULAR** | 14 campos: nome, CPF, nascimento, título de eleitor, cônjuge, endereço, endereço abreviado, CEP, telefone, celular, e-mail e 3 perguntas SIM/NÃO. Botão **PRÓXIMO →** para a próxima tela |
+| **INFORMES** | Até 10 bancos, com banco, valor atual e anexo (nome do arquivo). **TOTAL** automático e status de preenchimento por banco |
+| **NOTAS** | Contadores de pendências, links rápidos (Receita Federal, e-CAC, gov.br) e tabela de anotações com status e prazo |
+| **LISTAS** *(oculta)* | Bancos, SIM/NÃO, status das notas e tabela de abreviação de logradouros |
 
-Cada aba possui o link **← Voltar ao Menu** na célula A1.
+O **menu lateral** (TITULAR · INFORMES · NOTAS) aparece em todas as telas, com a tela atual destacada.
 
 ## ⚙️ Recursos de Excel utilizados
 
-- **Hiperlinks internos** para navegação entre abas e **hiperlinks externos** para sites.
-- **Validação de dados**:
-  - Listas suspensas (tipo de rendimento, categoria de despesa, tipo de bem, Sim/Não), alimentadas pela aba `Listas`;
-  - Datas restritas ao ano-calendário (via **nome definido** `AnoCalendario`);
-  - Valores numéricos maiores ou iguais a zero;
-  - CPF/CNPJ com fórmula personalizada (somente números, 11 ou 14 dígitos);
-  - Mensagens de erro e de entrada personalizadas.
-- **Fórmulas**: `SUMIFS`, `COUNTIFS`, `SUM`, `MIN`, `IF`/`AND`, referências entre abas.
-- **Formatação condicional**: destaque em vermelho para "Comprovante = Não" e semáforo ✔/⚠ nos alertas.
-- **Formatação monetária** (R$), painéis congelados, cores por aba e células de entrada em amarelo.
-- **Nome definido** (`AnoCalendario`) e configuração de impressão (paisagem, ajustar à largura).
+**Menu e navegação**
+- Menu lateral com a função `HYPERLINK` para saltar entre as abas e botão "PRÓXIMO →".
+- Hiperlinks externos para os sites oficiais.
+- Interface sem linhas de grade e sem cabeçalhos de linha/coluna, para aparência de aplicativo.
+
+**Formatações personalizadas** (o usuário digita só números; a máscara é aplicada automaticamente)
+- CPF: `000\.000\.000\-00` · CEP: `00000\-000`
+- Telefone: `\(00\)\ 0000\-0000` · Celular: `\(00\)\ 00000\-0000`
+- Título de eleitor: `0000\ 0000\ 0000` · Valores: `"R$ "#,##0.00` · Datas: `dd/mm/yyyy`
+
+**Validação de dados**
+- Listas suspensas (SIM/NÃO, bancos, status).
+- Números inteiros com faixa de tamanho (CPF, CEP, telefone, celular, título).
+- Data de nascimento entre 1900 e hoje.
+- Nome completo (exige nome e sobrenome), e-mail válido, texto com limite de caracteres.
+- Valores monetários maiores ou iguais a zero.
+- Anexo restrito às extensões `.pdf`, `.png`, `.jpg` e `.jpeg`.
+- Mensagens de entrada (dicas) e de erro personalizadas.
+
+**Fórmulas**
+- **Conferência do CPF**: cálculo dos dígitos verificadores (`SUMPRODUCT`, `MID`, `MOD`), exibindo "✔ CPF válido" ou "⚠ confira os dígitos".
+- **Rua abreviada automática**: `INDEX` + `MATCH` na tabela da aba LISTAS (Rua → R., Avenida → Av., etc.).
+- **TOTAL dos informes**: `SUMIF` e contagem de bancos com `SUMPRODUCT`.
+- **Status por banco**: `IF` indicando "✔ completo" ou "⚠ falta valor ou anexo".
+- **Notas**: `COUNTIF` para pendentes e concluídas.
+
+**Formatação condicional**: semáforo ✔/⚠, status coloridos e prazos vencidos em vermelho.
 
 ## ▶️ Como usar
 
-1. Abra o arquivo e comece pelo **Menu**.
-2. Em **Resumo**, ajuste os **parâmetros** (ano-calendário, limite de instrução, dedução por dependente e nº de dependentes).
-3. Preencha as abas de dados nas **células amarelas**, a partir da linha 6 (a linha 5, em cinza, é só um exemplo e não entra nos totais). Cada aba comporta 300 lançamentos.
-4. Digite CPF/CNPJ **somente com números**.
-5. Consulte o **Resumo** para ver os totais e os alertas de conferência.
-
-## 🖼️ Capturas de tela
-
-Imagens geradas a partir de uma cópia com **dados fictícios** apenas para ilustração.
-
-| Menu | Rendimentos |
-|---|---|
-| ![Menu](images/01_menu.png) | ![Rendimentos](images/02_rendimentos.png) |
-
-| Despesas | Bens e Direitos |
-|---|---|
-| ![Despesas](images/03_despesas.png) | ![Bens e Direitos](images/04_bens_direitos.png) |
-
-| Dívidas | Resumo |
-|---|---|
-| ![Dívidas](images/05_dividas.png) | ![Resumo](images/06_resumo.png) |
-
-## ⚠️ Observações importantes
-
-- Os valores de **limite de dedução com instrução (R$ 3.561,50)** e **dedução por dependente (R$ 2.275,08)** são referências editáveis. **Confirme os valores vigentes** no site da Receita Federal antes de declarar.
-- O limite de educação é aplicado como estimativa (limite × (1 + dependentes)); na declaração o limite é por pessoa.
-- A ferramenta **organiza** informações e **não substitui** o programa oficial da Receita Federal nem orientação contábil.
-- Os dados ficam somente no seu computador. Guarde os comprovantes originais.
-
-## 🧠 Aprendizados
-
-- Estruturação de um agregador de dados em Excel com foco em usabilidade.
-- Uso de validação de dados para garantir qualidade das entradas.
-- Navegação por hiperlinks e organização visual por abas.
-- Documentação técnica em Markdown e compartilhamento via GitHub.
+1. Abra o arquivo na tela **TITULAR** e preencha as **células amarelas**.
+2. Digite CPF, CEP, telefones e título **somente com números**; a máscara aparece sozinha.
+3. Clique em **PRÓXIMO →** (ou no menu lateral) para ir aos **INFORMES** e escolher o banco, o valor e o nome do arquivo anexo.
+4. Use **NOTAS** para registrar pendências e acessar os links rápidos.
 
 ## 📁 Estrutura do repositório
 
@@ -87,10 +72,20 @@ Imagens geradas a partir de uma cópia com **dados fictícios** apenas para ilus
 ├── README.md
 ├── Organizador_Imposto_de_Renda.xlsx
 └── images/
-    ├── 01_menu.png
-    ├── 02_rendimentos.png
-    ├── 03_despesas.png
-    ├── 04_bens_direitos.png
-    ├── 05_dividas.png
-    └── 06_resumo.png
+    ├── 01_titular.png
+    ├── 02_informes.png
+    └── 03_notas.png
 ```
+
+## ⚠️ Observações
+
+- A ferramenta **organiza** informações e **não substitui** o programa oficial da Receita Federal nem orientação contábil.
+- A conferência do CPF verifica apenas os dígitos verificadores.
+- Os dados ficam somente no seu computador.
+- Recomendado: Excel para Windows/Mac ou Microsoft 365.
+
+## 🧠 Aprendizados
+
+- Construção de uma interface com aparência de aplicativo dentro do Excel.
+- Uso de formatações personalizadas, validação de dados e fórmulas para garantir a qualidade das entradas.
+- Documentação técnica em Markdown e compartilhamento via GitHub.
