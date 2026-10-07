@@ -16,8 +16,6 @@ Agregador de dados para a declaração de Imposto de Renda construído **100% no
 |---|
 | ![Notas](images/03_notas.png) |
 
-> As imagens foram geradas a partir de uma cópia com **dados fictícios**, apenas para ilustração. O arquivo do projeto está em branco.
-
 ## 🗂️ Estrutura do arquivo (`Organizador_Imposto_de_Renda.xlsx`)
 
 | Aba | Conteúdo |
